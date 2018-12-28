@@ -1,0 +1,54 @@
+doctype html
+html
+  head
+    script(src="/addUser.js")
+    script(src="/deleteUser.js")
+  body
+    form(
+      onsubmit="addUser(event)" 
+      id="add-user"
+    )
+      div
+        div
+          label(for="add-user__displayname") Name:
+        input(
+          type="text" 
+          required="true" 
+          placeholder="Brian" 
+          id="add-user__displayname" 
+          name="displayName"
+        )
+      p
+      div
+        div
+          label(for="add-user_email") Email:
+        input(
+          type="text" 
+          required="true" 
+          placeholder="brian@gmail.com"
+          id="add-user_email"
+          name="email"
+        )
+      p
+      input(
+        type="submit" 
+        value="Добавить пользователя"
+      )
+
+    ul(style={width: '200px'})
+      each user in (usersList && usersList.length) ? usersList : ["There is no values"]
+        if user['_id']
+          li
+            a(
+              href=user['_id']
+            )=(user && (user.email || user.displayName))
+            span(
+              data-user-id=user['_id']
+              onClick="handleDelete(event)"
+              style={
+                cursor: 'pointer',
+              }
+            ) X
+        else
+          li #{user}
+

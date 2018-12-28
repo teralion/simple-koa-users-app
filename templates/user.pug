@@ -1,0 +1,42 @@
+doctype html
+html
+  head
+    script(src="/changeUser.js")
+  body
+    a(
+      href="http://localhost:3000/users"
+    ) К списку пользователей
+    p
+
+    form(
+      onsubmit="handleChange(event)"
+      id="change-user"
+    )
+      div
+        div
+          label(for="change-user__displayname") Name:
+        input(
+          type="text" 
+          required="true" 
+          placeholder="Brian" 
+          id="change-user__displayname" 
+          name="displayName"
+          value=(user.displayName || '')
+        )
+      p
+      div
+        div
+          label(for="change-user_email") Email:
+        input(
+          type="text" 
+          required="true" 
+          placeholder="brian@gmail.com"
+          id="change-user_email"
+          name="email"
+          value=(user.email || '')
+        )
+      p
+      input(
+        type="submit" 
+        value="Изменить пользователя"
+      )
