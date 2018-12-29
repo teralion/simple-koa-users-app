@@ -40,7 +40,7 @@ html
         if user['_id']
           li
             a(
-              href=user['_id']
+              href="/users/" + user['_id']
             )=(user && (user.email || user.displayName))
             span(
               data-user-id=user['_id']

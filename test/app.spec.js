@@ -2,14 +2,15 @@ const path = require('path');
 const FormData = require('form-data');
 const pug = require('pug');
 const config = require('config');
-const mongoose = require('../lib/mongoose');
-const User = require('../models/User');
 const assert = require('assert');
 const request = require('request-promise').defaults({
   simple: false,
   json: true,
   resolveWithFullResponse: true
 });
+
+const mongoose = require('../lib/mongoose');
+const User = require('../models/User');
 const app = require('../app.js');
 
 function getUrl(path) {
@@ -17,24 +18,26 @@ function getUrl(path) {
 }
 
 describe('Simple Koa users app', async () => {
-  let existingUserData = {
+
+  const extinctId = '5c2651b3d440040ca8d2c331';
+  const invalidId = 'aaaaaaaaaaaaaaaaaaaa';
+
+  const existingUserData = {
     displayName: 'Donald',
     email: 'trump@usa.com',
   };
-  let editedExistingUserData = {
+  const editedExistingUserData = {
     displayName: 'Donald',
     email: 'duck@usa.com',
   };
-  let newUserData = {
+  const newUserData = {
     displayName: 'Macron',
     email: 'emmanuel@france.fr',
   };
-  let invalidEmailUserData = {
+  const invalidEmailUserData = {
     displayName: 'Vladimir',
     email: 'Putin',
   };
-  const extinctId = '5c2651b3d440040ca8d2c331';
-  const invalidId = 'aaaaaaaaaaaaaaaaaaaa'
 
   let server;
   let exisitingUser;
@@ -55,9 +58,8 @@ describe('Simple Koa users app', async () => {
 
   describe('POST /users', async () => {
     it('create user from json object', async function() {
-      const response = await request({
+      const response = await request.post({
         uri: getUrl('/users'),
-        method: 'POST',
         body: newUserData,
       });
 
@@ -69,9 +71,8 @@ describe('Simple Koa users app', async () => {
     });
 
     it('create user from FormData', async () => {
-      const response = await request({
+      const response = await request.post({
         uri: getUrl('/users'),
-        method: 'POST',
         formData: newUserData
       });
 
@@ -83,9 +84,8 @@ describe('Simple Koa users app', async () => {
     });
 
     it('throws error if email exists', async () => {
-      const response = await request({
+      const response = await request.post({
         url: getUrl('/users'),
-        method: 'POST',
         body: existingUserData
       });
 
@@ -94,9 +94,8 @@ describe('Simple Koa users app', async () => {
     });
 
     it('throws error if email ivalid', async () => {
-      const response = await request({
+      const response = await request.post({
         url: getUrl('/users'),
-        method: 'POST',
         body: invalidEmailUserData
       });
 
@@ -107,10 +106,9 @@ describe('Simple Koa users app', async () => {
 
   describe('GET /users', async () => {
     it('get /users page with all users list', async () => {
-      const response = await request({
-        method: 'GET',
-        url: getUrl('/users')
-      });
+      const response = await request.get(
+        getUrl('/users')
+      );
 
       const users = await User.find({});
       const page = await pug.renderFile(
